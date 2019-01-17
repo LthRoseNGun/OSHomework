@@ -1,13 +1,13 @@
-obj-m += lkm_example.o
+# SPDX-License-Identifier: GPL-2.0
+#
+# Makefile for the linux myext2-filesystem routines.
+#
 
-all:
-	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
+obj-m := myext2.o
+myext2-y := balloc.o dir.o file.o ialloc.o inode.o \
+		ioctl.o namei.o super.o symlink.o
 
-clean:
-	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
-
-test:
-	sudo dmesg -C
-	sudo insmod lkm_example.ko
-	sudo rmmod lkm_example.ko
-	dmesg
+KDIR := /lib/modules/$(shell uname -r)/build
+PWD := $(shell pwd)
+default:
+	make -C $(KDIR) M=$(PWD) modules
